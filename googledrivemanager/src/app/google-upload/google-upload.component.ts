@@ -18,6 +18,7 @@ export class GoogleUploadComponent {
 
   async uploadToGoogleDrive(){
     if(this.file == null){
+      //Should not get here but is a failsafe
       console.log("No data present, ignoring call.")
     } else {
       console.log("Attempting to upload to googleDrive");

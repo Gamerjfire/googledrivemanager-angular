@@ -4,6 +4,7 @@ import { JwksValidationHandler, OAuthService } from 'angular-oauth2-oidc';
 import { Router } from '@angular/router';
 import { AuthConfig } from 'angular-oauth2-oidc';
 import { HttpClient } from '@angular/common/http';
+import { environment } from '../../config';
 
 @Injectable({
   providedIn: 'root'
@@ -16,12 +17,13 @@ export class AuthGoogleService {
       this.initConfiguration();
     }
 
+    //Base verification, client ID is tied to my current project for the creation of this and should be changed.
     initConfiguration(){
       const authConfig: AuthConfig = {
         issuer: 'https://accounts.google.com',
         strictDiscoveryDocumentValidation: false,
         responseType: 'token id_token',
-        clientId: '800847990228-a27nh4ndjgg8snavo4g8nb74rt61qfvk.apps.googleusercontent.com',
+        clientId: environment.clientId,
         redirectUri: 'https://localhost:4200/manager',
         scope: 'https://www.googleapis.com/auth/drive'
       };

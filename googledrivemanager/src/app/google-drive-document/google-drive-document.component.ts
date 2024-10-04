@@ -59,6 +59,8 @@ export class GoogleDriveDocumentComponent {
     this.getData();
   }
 
+  //Download requires separate functionality for types.
+  //TODO Implement further types and create a failsafe for unconvertable types.
   async download(documentId: String, documentName: string, type: string){
     var result;
     if(type == "application/json"){
