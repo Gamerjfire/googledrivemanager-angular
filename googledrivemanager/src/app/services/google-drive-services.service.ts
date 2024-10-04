@@ -4,6 +4,7 @@ import { AuthGoogleService } from './auth-google-service.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { DriveResponse } from '../model/DriveResponse';
+import { DriveDocument } from '../model/DriveDocument';
 
 @Injectable({
   providedIn: 'root'
@@ -18,17 +19,20 @@ export class GoogleDriveFunctionService{
     //Should return response as it can then populate data afterwards in the table.
     googleDriveList(): Promise<DriveResponse>{
         //Limited to my Email for the sake of testing currently.
-        return this.httpclient.get<DriveResponse>('https://www.googleapis.com/drive/v3/files?key=AIzaSyCEkd2-lZvMICEo2OI-Nn6OYmOWGMGHw64&q=%27judson.stangler%40gmail.com%27%20in%20owners', {headers: new HttpHeaders().set('Authorization','Bearer '+ this.authService.getToken())})
+        return this.httpclient.get<DriveResponse>('https://www.googleapis.com/drive/v3/files?fields=*&key=AIzaSyCEkd2-lZvMICEo2OI-Nn6OYmOWGMGHw64&q=%27judson.stangler%40gmail.com%27%20in%20owners', {headers: new HttpHeaders().set('Authorization','Bearer '+ this.authService.getToken())})
         .toPromise()
         .catch()
         .then((data) => {
             if(data){
-                console.log(data)
                 return data;
             } else {
                 throw "Data Not Found"
             }
         });
+    }
+
+    googleDriveTimeFetcher(id:String):Observable<any>{
+        return this.httpclient.get('https://www.googleapis.com/drive/v3/files/'+id+'?alt=media&key=AIzaSyCEkd2-lZvMICEo2OI-Nn6OYmOWGMGHw64', {headers: new HttpHeaders().set('Authorization','Bearer '+ this.authService.getToken()), responseType:'blob'})
     }
 
     googleDriveUpload(dataToUpload:File): Observable<Object>{
