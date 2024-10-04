@@ -27,7 +27,7 @@
             </ng-container>
             <ng-container matColumnDef="download">
                 <th mat-header-cell *matHeaderCellDef>Download File</th>
-                <td mat-cell *matCellDef="let driveDocument"><button (click)="download(driveDocument.id)">DOWNLOAD</button></td>
+                <td mat-cell *matCellDef="let driveDocument"><button (click)="download(driveDocument.id, driveDocument.name, driveDocument.mimeType)">DOWNLOAD</button></td>
             </ng-container>
         </table>
     </div>

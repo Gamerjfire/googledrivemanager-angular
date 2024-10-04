@@ -9,6 +9,8 @@ import { Router } from '@angular/router';
 import { RouterOutlet } from '@angular/router';
 import { GoogleDriveFunctionService } from '../services/google-drive-services.service';
 import { delay } from 'rxjs';
+import { firstValueFrom } from 'rxjs';
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'google-drive-documents',
@@ -48,12 +50,18 @@ export class GoogleDriveDocumentComponent {
     }
   }
 
-  deleteThis(documentId: String){
+  async deleteThis(documentId: String){
     console.log("Deleted");
+    await firstValueFrom(this.googleService.googleDriveDelete(documentId));
   }
 
-  download(documentId: String){
+  async download(documentId: String, documentName: string, type: string){
     console.log("Downloaded");
+    var result = await firstValueFrom(this.googleService.googleDriveDownload(documentId));
+    console.log(result);
+    var finalresult = new Blob([JSON.stringify(result)],{type: type})
+    console.log(finalresult);
+    saveAs(finalresult, documentName);
   }
 
   logOut(){
