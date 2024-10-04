@@ -57,10 +57,10 @@ export class GoogleDriveFunctionService{
     }
 
     googleDriveExportToWord(id:String): Observable<any>{
-        return this.httpclient.get('https://www.googleapis.com/drive/v3/files/export/'+id+'?mimeType=application%2Fpdf&key=AIzaSyCEkd2-lZvMICEo2OI-Nn6OYmOWGMGHw64', {headers: new HttpHeaders().set('Authorization','Bearer '+ this.authService.getToken()), responseType:'text'})
+        return this.httpclient.get('https://www.googleapis.com/drive/v3/files/'+id+'/export?mimeType=application%2Fvnd.openxmlformats-officedocument.wordprocessingml.document&key=AIzaSyCEkd2-lZvMICEo2OI-Nn6OYmOWGMGHw64', {headers: new HttpHeaders().set('Authorization','Bearer '+ this.authService.getToken()), responseType:'blob'})
     }
 
     googleDriveExportToExcel(id:String): Observable<any>{
-        return this.httpclient.get('https://www.googleapis.com/drive/v3/files/export/'+id+'?mimeType=application%2Fpdf&key=AIzaSyCEkd2-lZvMICEo2OI-Nn6OYmOWGMGHw64', {headers: new HttpHeaders().set('Authorization','Bearer '+ this.authService.getToken()), responseType:'blob'})
+        return this.httpclient.get('https://www.googleapis.com/drive/v3/files/'+id+'/export?mimeType=application%2Fvnd.openxmlformats-officedocument.spreadsheetml.sheet&key=AIzaSyCEkd2-lZvMICEo2OI-Nn6OYmOWGMGHw64', {headers: new HttpHeaders().set('Authorization','Bearer '+ this.authService.getToken()), responseType:'blob'})
     }
 }

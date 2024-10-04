@@ -61,10 +61,9 @@ export class GoogleDriveDocumentComponent {
       var tempresult = await firstValueFrom(this.googleService.googleDriveDownloadJson(documentId));
       result = new Blob([JSON.stringify(tempresult)],{type:"application/json"})
     } else if(type=="application/vnd.google-apps.document"){
-      console.log("Attempting to call")
       result = await firstValueFrom(this.googleService.googleDriveExportToWord(documentId));
-      console.log(result)
     } else if(type=="application/vnd.google-apps.spreadsheet"){
+      result = await firstValueFrom(this.googleService.googleDriveExportToExcel(documentId));
     } else {
       result = await firstValueFrom(this.googleService.googleDriveDownloadBlob(documentId));
     }
