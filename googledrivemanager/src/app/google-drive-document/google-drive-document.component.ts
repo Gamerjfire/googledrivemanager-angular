@@ -17,8 +17,12 @@ import { GoogleDriveFunctionService } from '../services/google-drive-services.se
   styleUrl: './google-drive-document.component.css'
 })
 export class GoogleDriveDocumentComponent {
-  allDriveDocuments: any;
-  rowsToDisplay=["name","type","modifiedDate", "delete", "download"]
+  allDriveDocuments: any = [
+    {name: "Document 1", mimeType: "Word Document", modifiedDate: Date.now()},
+    {name: "Document 2", mimeType: "PDF Document", modifiedDate: Date.now()},
+    {name: "Document 3", mimeType: "Word Document", modifiedDate: Date.now()}
+  ];
+  rowsToDisplay=["name","mimeType","modifiedDate", "delete", "download"]
   private authService = inject(AuthGoogleService);
   private router = inject(Router);
   private googleService = inject(GoogleDriveFunctionService)
@@ -27,14 +31,10 @@ export class GoogleDriveDocumentComponent {
     this.getData();
   }
 
-  getData(){
+  async getData(){
     //TODO Fetch Drive Documents
-    this.googleService.googleDriveList();
-    this.allDriveDocuments= [
-      {name: "Document 1", type: "Word Document", modifiedDate: Date.now()},
-      {name: "Document 2", type: "PDF Document", modifiedDate: Date.now()},
-      {name: "Document 3", type: "Word Document", modifiedDate: Date.now()}
-    ]
+    this.allDriveDocuments = (await this.googleService.googleDriveList()).files;
+    console.log(this.allDriveDocuments);
   }
 
   deleteThis(){

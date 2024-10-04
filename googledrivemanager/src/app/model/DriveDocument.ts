@@ -1,11 +1,13 @@
 export class DriveDocument {
+    id: string;
     name: string;
-    type: string;
-    modifiedDate: Date;
+    mimeType: string;
+    modifiedTime: Date;
   
-    constructor(name: string, type:string, modifiedDate:Date){
+    constructor(id:string, name: string, mimeType:string, modifiedDate:Date){
+      this.id = id;
       this.name = name;
-      this.type = type;
-      this.modifiedDate = modifiedDate;
+      this.mimeType = mimeType;
+      this.modifiedTime = modifiedDate;
     }
 }
