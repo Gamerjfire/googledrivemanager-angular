@@ -1,1 +1,10 @@
-<button (click)="uploadToGoogleDrive()">Upload to Google Drive</button>
+<div id="container">
+    <div id="left">Upload Here!</div>
+
+    <input id ="middle" type="file" class="file-input" (change)="setDataToUpload($event)">
+
+    <div *ngIf="file" id ="right">
+        <button (click)="uploadToGoogleDrive()">Upload to Google Drive</button>
+    </div>
+</div>
+

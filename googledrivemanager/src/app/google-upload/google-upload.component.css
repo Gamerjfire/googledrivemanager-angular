@@ -1,0 +1,14 @@
+#container{
+    width:100%;
+    display: flex;
+}
+
+#left{
+    width: 25%;
+}
+#middle{
+    width: 50%;
+}
+#right{
+    width: 25%;
+}

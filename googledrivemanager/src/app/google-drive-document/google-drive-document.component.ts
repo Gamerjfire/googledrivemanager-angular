@@ -8,6 +8,7 @@ import { AuthGoogleService } from '../services/auth-google-service.service';
 import { Router } from '@angular/router';
 import { RouterOutlet } from '@angular/router';
 import { GoogleDriveFunctionService } from '../services/google-drive-services.service';
+import { delay } from 'rxjs';
 
 @Component({
   selector: 'google-drive-documents',
@@ -17,36 +18,46 @@ import { GoogleDriveFunctionService } from '../services/google-drive-services.se
   styleUrl: './google-drive-document.component.css'
 })
 export class GoogleDriveDocumentComponent {
-  allDriveDocuments: any = [
-    {name: "Document 1", mimeType: "Word Document", modifiedDate: Date.now()},
-    {name: "Document 2", mimeType: "PDF Document", modifiedDate: Date.now()},
-    {name: "Document 3", mimeType: "Word Document", modifiedDate: Date.now()}
-  ];
+  allDriveDocuments: any = null;
+  retryCount:any = 3;
+  status:String = ""
   rowsToDisplay=["name","mimeType","modifiedDate", "delete", "download"]
   private authService = inject(AuthGoogleService);
   private router = inject(Router);
   private googleService = inject(GoogleDriveFunctionService)
 
+  //Load it in a state of "Wait for content"
   ngOnInit(): void{
+    this.status ='Loading'
+  }
+
+  //After Drop page is created, give content read
+  ngAfterContentInit(): void{
     this.getData();
   }
 
   async getData(){
-    //TODO Fetch Drive Documents
-    this.allDriveDocuments = (await this.googleService.googleDriveList()).files;
-    console.log(this.allDriveDocuments);
+    //Giving it 3 Retries in case of inconsistent error.
+    for(let count=0;count<this.retryCount; count++){
+      this.allDriveDocuments = (await this.googleService.googleDriveList()).files;
+      if(this.allDriveDocuments){
+        this.status = 'Loaded'
+        break;
+      }
+      delay(1000);
+    }
   }
 
-  deleteThis(){
+  deleteThis(documentId: String){
     console.log("Deleted");
   }
 
-  download(){
+  download(documentId: String){
     console.log("Downloaded");
-    this.googleService.googleDriveList();
   }
 
   logOut(){
-   this.authService.logout();
+    this.authService.logout();
+    this.router.navigate(['/login'])
   }
 }

@@ -1,32 +1,35 @@
-<table mat-table [dataSource]="allDriveDocuments">
-    <tr mat-header-row *matHeaderRowDef="rowsToDisplay"></tr>
-    <tr mat-row *matRowDef="let allDriveDocuments; columns: rowsToDisplay"></tr>
-    <ng-container matColumnDef="name">
-        <th mat-header-cell *matHeaderCellDef>Document Name</th>
-        <td mat-cell *matCellDef="let driveDocument">{{driveDocument.name}}</td>
-    </ng-container>
-    <ng-container matColumnDef="mimeType">
-        <th mat-header-cell *matHeaderCellDef>Document Type</th>
-        <td mat-cell *matCellDef="let driveDocument">{{driveDocument.mimeType}}</td>
-    </ng-container>
-    <ng-container matColumnDef="modifiedDate">
-        <th mat-header-cell *matHeaderCellDef>Modified Date</th>
-        <td mat-cell *matCellDef="let driveDocument">{{driveDocument.modifiedDate}}</td>
-    </ng-container>
-    <ng-container matColumnDef="delete">
-        <th mat-header-cell *matHeaderCellDef>Delete This File</th>
-        <td mat-cell *matCellDef="let driveDocument"><button (click)="deleteThis()">DELETE</button></td>
-    </ng-container>
-    <ng-container matColumnDef="download">
-        <th mat-header-cell *matHeaderCellDef>Download File</th>
-        <td mat-cell *matCellDef="let driveDocument"><button (click)="download()">DOWNLOAD</button></td>
-    </ng-container>
-</table>
-
-<google-upload></google-upload>
-
 <div class="logout-button">
     <button id="google-logout-button" class="logout-button btn btn-primary" (click)="logOut()">
         Log Out
     </button>
+</div>
+<div [ngSwitch]="status">
+    <div *ngSwitchCase="'Loaded'">
+        <google-upload></google-upload>
+        <table mat-table [dataSource]="allDriveDocuments">
+            <tr mat-header-row *matHeaderRowDef="rowsToDisplay"></tr>
+            <tr mat-row *matRowDef="let allDriveDocuments; columns: rowsToDisplay"></tr>
+            <ng-container matColumnDef="name">
+                <th mat-header-cell *matHeaderCellDef>Document Name</th>
+                <td mat-cell *matCellDef="let driveDocument">{{driveDocument.name}}</td>
+            </ng-container>
+            <ng-container matColumnDef="mimeType">
+                <th mat-header-cell *matHeaderCellDef>Document Type</th>
+                <td mat-cell *matCellDef="let driveDocument">{{driveDocument.mimeType}}</td>
+            </ng-container>
+            <ng-container matColumnDef="modifiedDate">
+                <th mat-header-cell *matHeaderCellDef>Modified Date</th>
+                <td mat-cell *matCellDef="let driveDocument">{{driveDocument.modifiedDate}}</td>
+            </ng-container>
+            <ng-container matColumnDef="delete">
+                <th mat-header-cell *matHeaderCellDef>Delete This File</th>
+                <td mat-cell *matCellDef="let driveDocument"><button (click)="deleteThis(driveDocument.id)">DELETE</button></td>
+            </ng-container>
+            <ng-container matColumnDef="download">
+                <th mat-header-cell *matHeaderCellDef>Download File</th>
+                <td mat-cell *matCellDef="let driveDocument"><button (click)="download(driveDocument.id)">DOWNLOAD</button></td>
+            </ng-container>
+        </table>
+    </div>
+    <div *ngSwitchCase="'Loading'">Content is currently loading: Please wait.</div>
 </div>
