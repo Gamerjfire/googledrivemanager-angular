@@ -22,8 +22,8 @@ export class GoogleDriveFunctionService{
         .toPromise()
         .catch()
         .then((data) => {
-            console.log(data)
             if(data){
+                console.log(data)
                 return data;
             } else {
                 throw "Data Not Found"
@@ -34,7 +34,6 @@ export class GoogleDriveFunctionService{
     googleDriveUpload(dataToUpload:File): Observable<Object>{
         var endpoint = "https://www.googleapis.com/upload/drive/v3/files?key=AIzaSyCEkd2-lZvMICEo2OI-Nn6OYmOWGMGHw64"
         //Set up dataToUpload
-        console.log(dataToUpload.size)
         if(dataToUpload.size < 5000000){
             endpoint+="&uploadType=multipart"
         } else {
