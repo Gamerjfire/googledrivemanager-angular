@@ -43,9 +43,10 @@ export class GoogleDriveDocumentComponent {
 
   download(){
     console.log("Downloaded");
+    this.googleService.googleDriveList();
   }
-  //No current need for logout but in case it is a need later
-  //logOut(){
-  //  this.authService.logOut();
-  //}
+
+  logOut(){
+   this.authService.logout();
+  }
 }

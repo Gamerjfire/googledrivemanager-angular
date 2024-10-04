@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
 import { inject } from '@angular/core';
-import { OAuthService } from 'angular-oauth2-oidc';
+import { JwksValidationHandler, OAuthService } from 'angular-oauth2-oidc';
 import { Router } from '@angular/router';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MatFormFieldModule } from '@angular/material/form-field';
 import { AuthConfig } from 'angular-oauth2-oidc';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +12,7 @@ export class AuthGoogleService {
     private oAuthService = inject(OAuthService)
     private route = inject(Router)
 
-    constructor() {
+    constructor(private httpclient:HttpClient) {
       this.initConfiguration();
     }
 
@@ -21,18 +20,19 @@ export class AuthGoogleService {
       const authConfig: AuthConfig = {
         issuer: 'https://accounts.google.com',
         strictDiscoveryDocumentValidation: false,
+        responseType: 'token id_token',
         clientId: '800847990228-a27nh4ndjgg8snavo4g8nb74rt61qfvk.apps.googleusercontent.com',
         redirectUri: 'https://localhost:4200/manager',
-        scope: "https://www.googleapis.com/auth/drive"
+        scope: 'https://www.googleapis.com/auth/drive'
       };
 
       this.oAuthService.configure(authConfig);
       this.oAuthService.setupAutomaticSilentRefresh();
-      this.oAuthService.loadDiscoveryDocument();
+      this.oAuthService.loadDiscoveryDocumentAndTryLogin();
     }
 
     login(){
-      this.oAuthService.initImplicitFlow();
+      this.oAuthService.initLoginFlow();
     }
 
     logout(){
@@ -41,7 +41,6 @@ export class AuthGoogleService {
     }
 
     getProfile(){
-      console.log(this.oAuthService.getIdentityClaims());
       return this.oAuthService.getIdentityClaims();
     }
 
