@@ -38,7 +38,7 @@ export class GoogleDriveDocumentComponent {
     this.getData();
   }
 
-  async getData(){
+  public async getData(){
     //Giving it 3 Retries in case of inconsistent error.
     for(let count=0;count<this.retryCount; count++){
       this.allDriveDocuments = (await this.googleService.googleDriveList()).files;
@@ -51,17 +51,24 @@ export class GoogleDriveDocumentComponent {
   }
 
   async deleteThis(documentId: String){
-    console.log("Deleted");
     await firstValueFrom(this.googleService.googleDriveDelete(documentId));
+    this.getData();
   }
 
   async download(documentId: String, documentName: string, type: string){
-    console.log("Downloaded");
-    var result = await firstValueFrom(this.googleService.googleDriveDownload(documentId));
-    console.log(result);
-    var finalresult = new Blob([JSON.stringify(result)],{type: type})
-    console.log(finalresult);
-    saveAs(finalresult, documentName);
+    var result;
+    if(type == "application/json"){
+      var tempresult = await firstValueFrom(this.googleService.googleDriveDownloadJson(documentId));
+      result = new Blob([JSON.stringify(tempresult)],{type:"application/json"})
+    } else if(type=="application/vnd.google-apps.document"){
+      console.log("Attempting to call")
+      result = await firstValueFrom(this.googleService.googleDriveExportToWord(documentId));
+      console.log(result)
+    } else if(type=="application/vnd.google-apps.spreadsheet"){
+    } else {
+      result = await firstValueFrom(this.googleService.googleDriveDownloadBlob(documentId));
+    }
+    saveAs(result, documentName);
   }
 
   logOut(){

@@ -22,7 +22,6 @@ export class GoogleUploadComponent {
     } else {
       console.log("Attempting to upload to googleDrive");
       var returned = await firstValueFrom(this.googleService.googleDriveUpload(this.file));
-      console.log(returned);
       this.file=null;
     }
   }

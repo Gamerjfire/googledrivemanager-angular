@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { inject } from '@angular/core';
 import { AuthGoogleService } from './auth-google-service.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { DriveDocument } from '../model/DriveDocument';
 import { Observable } from 'rxjs';
 import { DriveResponse } from '../model/DriveResponse';
 
@@ -49,7 +48,19 @@ export class GoogleDriveFunctionService{
         return this.httpclient.delete('https://www.googleapis.com/drive/v2/files/'+id+'?key=AIzaSyCEkd2-lZvMICEo2OI-Nn6OYmOWGMGHw64', {headers: new HttpHeaders().set('Authorization','Bearer '+ this.authService.getToken())})
     }
 
-    googleDriveDownload(id:String): Observable<any>{
-        return this.httpclient.get('https://www.googleapis.com/drive/v3/files/'+id+'/download?key=AIzaSyCEkd2-lZvMICEo2OI-Nn6OYmOWGMGHw64', {headers: new HttpHeaders().set('Authorization','Bearer '+ this.authService.getToken())})
+    googleDriveDownloadBlob(id:String): Observable<any>{
+        return this.httpclient.get('https://www.googleapis.com/drive/v3/files/'+id+'?alt=media&key=AIzaSyCEkd2-lZvMICEo2OI-Nn6OYmOWGMGHw64', {headers: new HttpHeaders().set('Authorization','Bearer '+ this.authService.getToken()), responseType:'blob'})
+    }
+
+    googleDriveDownloadJson(id:String): Observable<any>{
+        return this.httpclient.get('https://www.googleapis.com/drive/v3/files/'+id+'?alt=media&key=AIzaSyCEkd2-lZvMICEo2OI-Nn6OYmOWGMGHw64', {headers: new HttpHeaders().set('Authorization','Bearer '+ this.authService.getToken()), responseType:'json'})
+    }
+
+    googleDriveExportToWord(id:String): Observable<any>{
+        return this.httpclient.get('https://www.googleapis.com/drive/v3/files/export/'+id+'?mimeType=application%2Fpdf&key=AIzaSyCEkd2-lZvMICEo2OI-Nn6OYmOWGMGHw64', {headers: new HttpHeaders().set('Authorization','Bearer '+ this.authService.getToken()), responseType:'text'})
+    }
+
+    googleDriveExportToExcel(id:String): Observable<any>{
+        return this.httpclient.get('https://www.googleapis.com/drive/v3/files/export/'+id+'?mimeType=application%2Fpdf&key=AIzaSyCEkd2-lZvMICEo2OI-Nn6OYmOWGMGHw64', {headers: new HttpHeaders().set('Authorization','Bearer '+ this.authService.getToken()), responseType:'blob'})
     }
 }
