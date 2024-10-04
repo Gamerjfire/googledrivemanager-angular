@@ -36,7 +36,11 @@ export class GoogleDriveFunctionService{
         return this.httpclient.get('https://www.googleapis.com/drive/v3/files/'+id+'?alt=media&key='+environment.apiKey, {headers: new HttpHeaders().set('Authorization','Bearer '+ this.authService.getToken()), responseType:'blob'})
     }
 
-    googleDriveUpload(dataToUpload:File): Observable<Object>{
+    googleDriveUpload(dataToUpload:any): Observable<Object>{
+        console.log(dataToUpload);
+        dataToUpload.mimeType=dataToUpload.type;
+        dataToUpload.fileName=dataToUpload.name;
+        dataToUpload.title=dataToUpload.name;
         console.log(dataToUpload);
         var endpoint = "https://www.googleapis.com/upload/drive/v3/files?key="+environment.apiKey
         //Set up dataToUpload
@@ -45,27 +49,34 @@ export class GoogleDriveFunctionService{
         } else {
             endpoint+="&uploadType=resumable"
         }
-        this.headers.append
-        return this.httpclient.post(endpoint, dataToUpload, {headers: new HttpHeaders().set('Authorization','Bearer '+ this.authService.getToken()).set("Content-Type",dataToUpload.type).set("Content-Length",dataToUpload.size.toString())})
+        return this.httpclient.post(endpoint, dataToUpload, {headers: new HttpHeaders().set('Authorization','Bearer '+ this.authService.getToken())
+            .set("Content-Type",dataToUpload.type)
+            .set("Content-Length",dataToUpload.size.toString())
+            .set("Content-Disposition",'attachment; filename="JudsonFileName"')})
     }
 
     googleDriveDelete(id:String): Observable<any>{
-        return this.httpclient.delete('https://www.googleapis.com/drive/v2/files/'+id+'?'+environment.apiKey, {headers: new HttpHeaders().set('Authorization','Bearer '+ this.authService.getToken())})
+        return this.httpclient.delete('https://www.googleapis.com/drive/v2/files/'+id+'?'+environment.apiKey, {headers: new HttpHeaders()
+            .set('Authorization','Bearer '+ this.authService.getToken())})
     }
 
     googleDriveDownloadBlob(id:String): Observable<any>{
-        return this.httpclient.get('https://www.googleapis.com/drive/v3/files/'+id+'?alt=media&key='+environment.apiKey, {headers: new HttpHeaders().set('Authorization','Bearer '+ this.authService.getToken()), responseType:'blob'})
+        return this.httpclient.get('https://www.googleapis.com/drive/v3/files/'+id+'?alt=media&key='+environment.apiKey, {headers: new HttpHeaders()
+            .set('Authorization','Bearer '+ this.authService.getToken()), responseType:'blob'})
     }
 
     googleDriveDownloadJson(id:String): Observable<any>{
-        return this.httpclient.get('https://www.googleapis.com/drive/v3/files/'+id+'?alt=media&key='+environment.apiKey, {headers: new HttpHeaders().set('Authorization','Bearer '+ this.authService.getToken()), responseType:'json'})
+        return this.httpclient.get('https://www.googleapis.com/drive/v3/files/'+id+'?alt=media&key='+environment.apiKey, {headers: new HttpHeaders()
+            .set('Authorization','Bearer '+ this.authService.getToken()), responseType:'json'})
     }
 
     googleDriveExportToWord(id:String): Observable<any>{
-        return this.httpclient.get('https://www.googleapis.com/drive/v3/files/'+id+'/export?mimeType=application%2Fvnd.openxmlformats-officedocument.wordprocessingml.document&key='+environment.apiKey, {headers: new HttpHeaders().set('Authorization','Bearer '+ this.authService.getToken()), responseType:'blob'})
+        return this.httpclient.get('https://www.googleapis.com/drive/v3/files/'+id+'/export?mimeType=application%2Fvnd.openxmlformats-officedocument.wordprocessingml.document&key='+environment.apiKey, {headers: new HttpHeaders()
+            .set('Authorization','Bearer '+ this.authService.getToken()), responseType:'blob'})
     }
 
     googleDriveExportToExcel(id:String): Observable<any>{
-        return this.httpclient.get('https://www.googleapis.com/drive/v3/files/'+id+'/export?mimeType=application%2Fvnd.openxmlformats-officedocument.spreadsheetml.sheet&key='+environment.apiKey, {headers: new HttpHeaders().set('Authorization','Bearer '+ this.authService.getToken()), responseType:'blob'})
+        return this.httpclient.get('https://www.googleapis.com/drive/v3/files/'+id+'/export?mimeType=application%2Fvnd.openxmlformats-officedocument.spreadsheetml.sheet&key='+environment.apiKey, {headers: new HttpHeaders()
+            .set('Authorization','Bearer '+ this.authService.getToken()), responseType:'blob'})
     }
 }
