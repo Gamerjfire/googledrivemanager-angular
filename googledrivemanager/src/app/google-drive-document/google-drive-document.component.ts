@@ -42,9 +42,9 @@ export class GoogleDriveDocumentComponent {
     //Giving it 3 Retries in case of inconsistent error.
     for(let count=0;count<this.retryCount; count++){
       try{
-        this.allDriveDocuments = (await this.googleService.googleDriveList()).files;
+        this.allDriveDocuments = (await firstValueFrom(this.googleService.googleDriveList())).files;
       } catch {
-        console.log("Retry " + count + " completed, continuing attempts.")
+        console.log("Attempt " + count + " failed, continuing attempts.")
       }
       if(this.allDriveDocuments!=null){
         this.status = 'Loaded'
