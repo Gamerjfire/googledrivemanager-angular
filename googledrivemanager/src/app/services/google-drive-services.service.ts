@@ -20,7 +20,7 @@ export class GoogleDriveFunctionService{
     //Should return response as it can then populate data afterwards in the table.
     googleDriveList(): Observable<DriveResponse>{
         //Limited to my Email for the sake of testing.
-        return this.httpclient.get<DriveResponse>('https://www.googleapis.com/drive/v3/files?fields=*&key='+environment.apiKey+'&q=%27judson.stangler%40gmail.com%27%20in%20owners', {headers: new HttpHeaders().set('Authorization','Bearer '+ this.authService.getToken())})
+        return this.httpclient.get<DriveResponse>('https://www.googleapis.com/drive/v3/files?fields=*&key='+environment.apiKey, {headers: new HttpHeaders().set('Authorization','Bearer '+ this.authService.getToken())})
     }
 
     googleDriveTimeFetcher(id:String):Observable<any>{
