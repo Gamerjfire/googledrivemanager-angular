@@ -55,7 +55,6 @@ export class GoogleDriveFunctionService{
             .set('Authorization','Bearer '+ this.authService.getToken()), responseType:'json'})
     }
 
-
     //Defaulting to MicrosoftWord as a modifiable way of looking at the data afterwords
     googleDriveExportToWord(id:String): Observable<any>{
         return this.httpclient.get('https://www.googleapis.com/drive/v3/files/'+id+'/export?mimeType=application%2Fvnd.openxmlformats-officedocument.wordprocessingml.document&key='+environment.apiKey, {headers: new HttpHeaders()
